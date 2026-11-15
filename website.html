@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+https://github.com/youmna4hm/readspeare.git
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>readspeare.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f2eb; /* Warm linen-beige page background */
+            --text-color: #2b2b2b;
+            --accent-color: #7a5c46; /* Earthy brown */
+            --card-bg: #fffbf5; /* Light, light cream-beige for the center cards/containers */
+            --border-color: #e5dcd1;
+            --header-grad-top: #ede4d8;
+            --footer-bg: #ede4d8; /* Footer beige */
+            --meta-color: #6d645c;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #181615;
+            --text-color: #E6DFD5;
+            --accent-color: #b08968;
+            --card-bg: #1E1A17;
+            --border-color: #2E2A28;
+            --header-grad-top: #221F1E;
+            --footer-bg: #1A1715;
+            --meta-color: #A39B90;
+        }
+
+        * {
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            position: relative;
+            text-align: center;
+            padding: 4.5rem 2rem 2.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--footer-bg);
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            position: absolute;
+            top: 1.5rem;
+            right: 2rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+        .theme-toggle:hover {
+            border-color: var(--accent-color);
+        }
+
+        header h1 {
+            font-family: 'Lora', serif;
+            font-size: 2.6rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        header p {
+            color: var(--meta-color);
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 2rem;
+            font-weight: 500;
+            flex-wrap: wrap;
+        }
+
+        nav a, .nav-btn {
+            text-decoration: none;
+            color: var(--text-color);
+            background: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding-bottom: 0.2rem;
+            border-bottom: 2px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        nav a:hover, nav a.active, .nav-btn:hover, .nav-btn.active {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .tab-section {
+            display: none;
+        }
+
+        .tab-section.active {
+            display: block;
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: 1.9rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        /* Search Bar */
+        .search-box {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        /* Vertical Poem Feed */
+        .poem-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+
+        .poem-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 2.2rem 2.4rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .poem-card-title {
+            font-family: 'Lora', serif;
+            font-size: 1.45rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem 0;
+            color: var(--text-color);
+        }
+
+        .poem-card-author {
+            font-size: 0.85rem;
+            color: var(--meta-color);
+            font-style: italic;
+            margin-bottom: 1.4rem;
+        }
+
+        .poem-card-body {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            white-space: pre-line;
+            font-size: 1.08rem;
+            line-height: 1.9;
+            color: var(--text-color);
+            margin-bottom: 1.6rem;
+        }
+
+        .card-notes-toggle {
+            background: none;
+            border: none;
+            padding: 0;
+            color: var(--accent-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-decoration: underline;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .card-notes-text {
+            display: none;
+            background: var(--header-grad-top);
+            padding: 0.9rem 1.1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            margin-bottom: 1.2rem;
+        }
+
+        /* 1 to 3 Star Rating Area */
+        .star-rating-bar {
+            border-top: 1px solid var(--border-color);
+            padding-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .stars-group {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .star-label {
+            font-size: 0.85rem;
+            color: var(--meta-color);
+            margin-right: 0.4rem;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 1.35rem;
+            cursor: pointer;
+            color: var(--border-color);
+            padding: 0 2px;
+            transition: transform 0.15s ease, color 0.15s ease;
+        }
+
+        .star-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .star-btn.lit {
+            color: #d4a373;
+        }
+
+        .star-thank-you {
+            font-size: 0.88rem;
+            font-style: italic;
+            color: var(--accent-color);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .star-thank-you.visible {
+            opacity: 1;
+        }
+
+        /* Community Grid */
+        .poem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+        }
+
+        .poem-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.2rem 1.4rem;
+            border-radius: 6px;
+            text-align: left;
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+        }
+
+        .poem-btn:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* Pop-up Modal for Community Poems */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            max-width: 650px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            padding: 3rem;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border: 1px solid var(--border-color);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1.2rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: var(--meta-color);
+        }
+
+        .close-btn:hover {
+            color: var(--text-color);
+        }
+
+        .modal-poem-title {
+            font-family: 'Lora', serif;
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 0.3rem;
+        }
+
+        .modal-poem-author {
+            font-size: 0.9rem;
+            color: var(--meta-color);
+            font-style: italic;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-poem-body {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            white-space: pre-line;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+        }
+
+        /* Tips Section */
+        .tip-card {
+            background: var(--card-bg);
+            padding: 1.8rem;
+            border-radius: 6px;
+            margin-bottom: 1.2rem;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .tip-card h3 {
+            margin-top: 0;
+            font-family: 'Lora', serif;
+            font-size: 1.2rem;
+        }
+
+        .tip-card p {
+            margin-bottom: 0;
+            color: var(--meta-color);
+        }
+
+        /* Submission Form */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        textarea.form-control {
+            min-height: 220px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            border: none;
+            padding: 0.9rem 2rem;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+
+        .success-msg {
+            display: none;
+            background: var(--bg-color);
+            border: 1px solid var(--accent-color);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        /* Floating Toasts */
+        .cozy-toast-stack {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 950;
+            display: flex;
+            flex-direction: column;
+            gap: 0.85rem;
+            max-width: 340px;
+            width: calc(100% - 3rem);
+            pointer-events: none;
+        }
+
+        .cozy-toast {
+            pointer-events: auto;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 10px;
+            padding: 1.1rem 1.3rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            position: relative;
+            animation: slideUpFade 0.5s ease forwards;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cozy-toast-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.35rem;
+        }
+
+        .cozy-toast-tag {
+            font-family: 'Lora', serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .cozy-toast-close {
+            background: none;
+            border: none;
+            color: var(--meta-color);
+            font-size: 1.15rem;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0 4px;
+        }
+
+        .cozy-toast-close:hover {
+            color: var(--text-color);
+        }
+
+        .cozy-toast p {
+            margin: 0;
+            font-size: 0.88rem;
+            line-height: 1.55;
+            color: var(--text-color);
+        }
+
+        footer {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            font-size: 0.9rem;
+            color: var(--meta-color);
+            border-top: 1px solid var(--border-color);
+            background-color: var(--footer-bg);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Toggle Dark/Light Mode">🌙</button>
+        <h1>readspeare</h1>
+        <p>where you find peace in reading, and writing poetry.</p>
+        <nav>
+            <button class="nav-btn active" onclick="switchTab('poetry', this)">poetry library</button>
+            <button class="nav-btn" onclick="switchTab('community', this)">community feed</button>
+            <button class="nav-btn" onclick="switchTab('submit', this)">submit poetry</button>
+            <button class="nav-btn" onclick="switchTab('tips', this)">writing tips</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        
+        <!-- POETRY LIBRARY SECTION -->
+        <section id="poetry" class="tab-section active">
+            <h2>Curated Poetry</h2>
+            <input type="text" id="searchInput" class="search-box" placeholder="Search poem titles..." onkeyup="filterPoems()">
+            <div class="poem-feed" id="poemFeed"></div>
+        </section>
+
+        <!-- COMMUNITY FEED SECTION -->
+        <section id="community" class="tab-section">
+            <h2>Community Submissions</h2>
+            <p style="color: var(--meta-color); margin-bottom: 1.5rem; font-style: italic;">Fresh verses shared directly by readers and writers.</p>
+            <div class="poem-grid" id="communityGrid"></div>
+        </section>
+
+        <!-- SUBMIT POETRY SECTION -->
+        <section id="submit" class="tab-section">
+            <h2>Share Your Poetry</h2>
+            <div class="success-msg" id="successMsg">✨ Your poem has been shared to the community feed!</div>
+            <form id="submissionForm" onsubmit="handlePoemSubmission(event)">
+                <div class="form-group">
+                    <label for="subTitle">Poem Title</label>
+                    <input type="text" id="subTitle" class="form-control" placeholder="Enter title..." required>
+                </div>
+                <div class="form-group">
+                    <label for="subAuthor">Your Name or Pen Name (Leave blank for Anonymous)</label>
+                    <input type="text" id="subAuthor" class="form-control" placeholder="e.g., Jane Doe or Anonymous">
+                </div>
+                <div class="form-group">
+                    <label for="subText">Poem Verse</label>
+                    <textarea id="subText" class="form-control" placeholder="Write your poetry here... Press enter for new lines." required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Publish to Community</button>
+            </form>
+        </section>
+
+        <!-- WRITING TIPS SECTION -->
+        <section id="tips" class="tab-section">
+            <h2>Writing Tips & Ideas</h2>
+            
+            <div class="tip-card">
+                <h3>WRITE HERE ABOUT TIP 1 HEADING</h3>
+                <p>WRITE HERE ABOUT TIP 1 CONTENT</p>
+            </div>
+
+            <div class="tip-card">
+                <h3>WRITE HERE ABOUT TIP 2 HEADING</h3>
+                <p>WRITE HERE ABOUT TIP 2 CONTENT</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- POP-UP MODAL FOR COMMUNITY POEMS -->
+    <div class="modal-overlay" id="poemModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="forceCloseModal()">&times;</button>
+            <h3 class="modal-poem-title" id="modalTitle"></h3>
+            <div class="modal-poem-author" id="modalAuthor"></div>
+            <div class="modal-poem-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- FLOATING TOASTS -->
+    <div class="cozy-toast-stack" id="toastStack">
+        <div class="cozy-toast" id="welcomeToast">
+            <div class="cozy-toast-header">
+                <span class="cozy-toast-tag">🌷 a little note from the creator</span>
+                <button class="cozy-toast-close" onclick="dismissToast('welcomeToast')" title="Close">&times;</button>
+            </div>
+            <p>haii i'm a teen writer and i made this website to publish my poetry and have a small community where everyone can share their poems too! </p>
+        </div>
+
+        <div class="cozy-toast" id="funFactToast" style="display: none;">
+            <div class="cozy-toast-header">
+                <span class="cozy-toast-tag">✨ lil fun fact since you've been here a while! :3</span>
+                <button class="cozy-toast-close" onclick="dismissToast('funFactToast')" title="Close">&times;</button>
+            </div>
+            <p>the reason i started this was because little me had a dream, and after trying to get published for so long and failing, i built a website where people who felt rejected and judged, like i felt, could feel safe. 🌼</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>new beginnings start here.</p>
+    </footer>
+
+    <script>
+        const poems = [
+            {
+                id: "poem-1",
+                title: "WRITE HERE ABOUT POEM 1 TITLE",
+                author: "readspeare archives",
+                text: `WRITE HERE ABOUT POEM 1 TEXT
+(PRESS ENTER FOR NEW LINES)`,
+                notes: "WRITE HERE ABOUT POEM 1 MEANING OR THOUGHTS (OR LEAVE EMPTY)"
+            },
+            {
+                id: "poem-2",
+                title: "WRITE HERE ABOUT POEM 2 TITLE",
+                author: "readspeare archives",
+                text: `WRITE HERE ABOUT POEM 2 TEXT`,
+                notes: ""
+            },
+            {
+                id: "poem-3",
+                title: "WRITE HERE ABOUT POEM 3 TITLE",
+                author: "readspeare archives",
+                text: `WRITE HERE ABOUT POEM 3 TEXT`,
+                notes: "WRITE HERE ABOUT POEM 3 MEANING OR THOUGHTS"
+            }
+        ];
+
+        const starMessages = {
+            1: "thank you for reading & leaving a star! 🤍",
+            2: "two stars!! thank you so much, this means the world ✨",
+            3: "three stars!! you just made my whole day, thank you 🌷"
+        };
+
+        let savedRatings = JSON.parse(localStorage.getItem("readspeare_ratings")) || {};
+
+        let communityPoems = JSON.parse(localStorage.getItem("readspeare_community")) || [
+            {
+                title: "the one",
+                author: "Anonymous",
+                text: "Out of all the noise in the world,\nyou found the quietest page.\nAnd here, we breathe."
+            }
+        ];
+
+        function switchTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            btnElement.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const poemFeed = document.getElementById("poemFeed");
+        const communityGrid = document.getElementById("communityGrid");
+
+        function renderPoems(list) {
+            poemFeed.innerHTML = "";
+            if (list.length === 0) {
+                poemFeed.innerHTML = `<p style="color:var(--meta-color);">No poems found matching your search.</p>`;
+                return;
+            }
+
+            list.forEach((poem, idx) => {
+                const poemKey = poem.id || `poem-idx-${idx}`;
+                const currentRating = savedRatings[poemKey] || 0;
+
+                const card = document.createElement("article");
+                card.className = "poem-card";
+
+                let notesHTML = "";
+                if (poem.notes && poem.notes.trim() !== "") {
+                    notesHTML = `
+                        <button class="card-notes-toggle" onclick="toggleCardNotes('${poemKey}')">read author's notes</button>
+                        <div class="card-notes-text" id="notes-${poemKey}">${escapeHTML(poem.notes)}</div>
+                    `;
+                }
+
+                card.innerHTML = `
+                    <h3 class="poem-card-title">${escapeHTML(poem.title)}</h3>
+                    <div class="poem-card-author">by ${escapeHTML(poem.author || 'readspeare archives')}</div>
+                    <div class="poem-card-body">${escapeHTML(poem.text)}</div>
+                    ${notesHTML}
+                    <div class="star-rating-bar">
+                        <div class="stars-group">
+                            <span class="star-label">rate this poem:</span>
+                            <button class="star-btn ${currentRating >= 1 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 1, this)" title="1 Star">★</button>
+                            <button class="star-btn ${currentRating >= 2 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 2, this)" title="2 Stars">★</button>
+                            <button class="star-btn ${currentRating >= 3 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 3, this)" title="3 Stars">★</button>
+                        </div>
+                        <span class="star-thank-you ${currentRating > 0 ? 'visible' : ''}" id="msg-${poemKey}">
+                            ${currentRating > 0 ? starMessages[currentRating] : ''}
+                        </span>
+                    </div>
+                `;
+
+                poemFeed.appendChild(card);
+            });
+        }
+
+        function ratePoem(poemKey, stars, btnElement) {
+            savedRatings[poemKey] = stars;
+            localStorage.setItem("readspeare_ratings", JSON.stringify(savedRatings));
+
+            const group = btnElement.parentElement;
+            const allStars = group.querySelectorAll('.star-btn');
+            allStars.forEach((star, index) => {
+                if (index < stars) {
+                    star.classList.add('lit');
+                } else {
+                    star.classList.remove('lit');
+                }
+            });
+
+            const msgEl = document.getElementById(`msg-${poemKey}`);
+            if (msgEl) {
+                msgEl.textContent = starMessages[stars];
+                msgEl.classList.add('visible');
+            }
+        }
+
+        function toggleCardNotes(poemKey) {
+            const notesEl = document.getElementById(`notes-${poemKey}`);
+            if (notesEl) {
+                notesEl.style.display = notesEl.style.display === "block" ? "none" : "block";
+            }
+        }
+
+        function filterPoems() {
+            const query = document.getElementById("searchInput").value.toLowerCase();
+            const filtered = poems.filter(p => p.title.toLowerCase().includes(query));
+            renderPoems(filtered);
+        }
+
+        function escapeHTML(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        function renderCommunityPoems() {
+            communityGrid.innerHTML = "";
+            if (communityPoems.length === 0) {
+                communityGrid.innerHTML = `<p style="color:var(--meta-color);">No community submissions yet. Be the first to share your verse!</p>`;
+                return;
+            }
+            communityPoems.forEach((poem) => {
+                const btn = document.createElement("button");
+                btn.className = "poem-btn";
+                btn.innerHTML = `${escapeHTML(poem.title)}<br><span style="font-size:0.8rem; font-family:'Inter', sans-serif; color:var(--meta-color); font-style:italic;">by ${escapeHTML(poem.author || 'Anonymous')}</span>`;
+                btn.onclick = () => openPoem(poem);
+                communityGrid.appendChild(btn);
+            });
+        }
+
+        function handlePoemSubmission(event) {
+            event.preventDefault();
+            const title = document.getElementById("subTitle").value.trim();
+            let author = document.getElementById("subAuthor").value.trim();
+            const text = document.getElementById("subText").value.trim();
+
+            if (!author) author = "Anonymous";
+
+            const newPoem = { title, author, text };
+            communityPoems.unshift(newPoem);
+            localStorage.setItem("readspeare_community", JSON.stringify(communityPoems));
+
+            document.getElementById("submissionForm").reset();
+            const successMsg = document.getElementById("successMsg");
+            successMsg.style.display = "block";
+            
+            renderCommunityPoems();
+
+            setTimeout(() => {
+                successMsg.style.display = "none";
+            }, 5000);
+        }
+
+        function openPoem(poem) {
+            document.getElementById("modalTitle").textContent = poem.title;
+            document.getElementById("modalAuthor").textContent = `by ${poem.author || 'Anonymous'}`;
+            document.getElementById("modalBody").textContent = poem.text;
+            document.getElementById("poemModal").style.display = "flex";
+        }
+
+        function forceCloseModal() {
+            document.getElementById("poemModal").style.display = "none";
+        }
+
+        function closeModal(event) {
+            if (event.target.id === "poemModal") {
+                forceCloseModal();
+            }
+        }
+
+        function dismissToast(id) {
+            const el = document.getElementById(id);
+            if (el) el.style.display = "none";
+        }
+
+        setTimeout(() => {
+            const funFact = document.getElementById("funFactToast");
+            if (funFact) {
+                funFact.style.display = "block";
+            }
+        }, 300000);
+
+        const htmlElement = document.documentElement;
+        const themeToggleBtn = document.getElementById("themeToggleBtn");
+
+        function toggleTheme() {
+            const currentTheme = htmlElement.getAttribute("data-theme");
+            const newTheme = currentTheme === "light" ? "dark" : "light";
+            htmlElement.setAttribute("data-theme", newTheme);
+            localStorage.setItem("readspeare_theme", newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            themeToggleBtn.textContent = theme === "dark" ? "☀️" : "🌙";
+        }
+
+        const savedTheme = localStorage.getItem("readspeare_theme") || "light";
+        htmlElement.setAttribute("data-theme", savedTheme);
+        updateThemeIcon(savedTheme);
+
+        renderPoems(poems);
+        renderCommunityPoems();
+    </script>
+
+</body>
+</html>
