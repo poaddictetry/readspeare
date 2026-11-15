@@ -657,11 +657,8 @@
             3: "three stars!! you just made my whole day, thank you 🌷"
         };
 
-        let savedRatings = JSON.parse(localStorage.getItem("readspeare_ratings")) || {};
-
-        let communityPoems = JSON.parse(localStorage.getItem("readspeare_community")) || [
-            {
-        ];
+       let communityPoems = JSON.parse(localStorage.getItem("readspeare_community") || "[]");
+if (!Array.isArray(communityPoems)) communityPoems = [];
 
         function switchTab(tabId, btnElement) {
             document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
