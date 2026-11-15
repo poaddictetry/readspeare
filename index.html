@@ -656,6 +656,7 @@
             2: "two stars!! thank you so much, this means the world ✨",
             3: "three stars!! you just made my whole day, thank you 🌷"
         };
+        let savedRatings = JSON.parse(localStorage.getItem("readspeare_ratings")) || {};
 
        let communityPoems = JSON.parse(localStorage.getItem("readspeare_community") || "[]");
 if (!Array.isArray(communityPoems)) communityPoems = [];
