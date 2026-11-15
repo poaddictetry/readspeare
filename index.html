@@ -564,7 +564,7 @@
                     <input type="text" id="subTitle" class="form-control" placeholder="Enter title..." required>
                 </div>
                 <div class="form-group">
-                    <label for="subAuthor">Your Name or Pen Name (Leave blank for Anonymous)</label>
+                    <label for="subAuthor">Pen Name (Leave blank for Anonymous)</label>
                     <input type="text" id="subAuthor" class="form-control" placeholder="e.g., Jane Doe or Anonymous">
                 </div>
                 <div class="form-group">
@@ -661,10 +661,6 @@
 
         let communityPoems = JSON.parse(localStorage.getItem("readspeare_community")) || [
             {
-                title: "the one",
-                author: "Anonymous",
-                text: "Out of all the noise in the world,\nyou found the quietest page.\nAnd here, we breathe."
-            }
         ];
 
         function switchTab(tabId, btnElement) {
