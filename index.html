@@ -259,17 +259,10 @@
 
         .poem-card-header {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
             gap: 1rem;
-        }
-
-        .poem-card-title {
-            font-family: 'Lora', serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin: 0 0 0.2rem 0;
-            color: var(--text-color);
+            margin-bottom: 1.2rem;
         }
 
         .bookmark-btn {
@@ -305,7 +298,7 @@
             font-size: 0.84rem;
             color: var(--meta-color);
             font-style: italic;
-            margin-bottom: 1.35rem;
+            margin: 0;
         }
 
         .poem-card-body {
@@ -397,7 +390,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 1.2rem;
+            gap: 0.9rem;
             margin-top: 2.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid var(--border-color);
@@ -407,10 +400,10 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             color: var(--text-color);
-            padding: 0.45rem 0.95rem;
+            padding: 0.4rem 0.85rem;
             border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
+            font-family: 'Lora', serif;
+            font-size: 0.95rem;
             cursor: pointer;
             transition: border-color 0.2s ease, color 0.2s ease;
         }
@@ -421,15 +414,16 @@
         }
 
         .page-btn:disabled {
-            opacity: 0.4;
+            opacity: 0.35;
             cursor: not-allowed;
         }
 
         .page-indicator {
             font-family: 'Lora', serif;
             font-style: italic;
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--meta-color);
+            letter-spacing: 0.04em;
         }
 
         .poem-grid {
@@ -445,7 +439,8 @@
             border-radius: 6px;
             text-align: left;
             font-family: 'Lora', serif;
-            font-size: 1.1rem;
+            font-style: italic;
+            font-size: 1rem;
             color: var(--text-color);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -496,13 +491,6 @@
 
         .close-btn:hover {
             color: var(--text-color);
-        }
-
-        .modal-poem-title {
-            font-family: 'Lora', serif;
-            font-size: 1.8rem;
-            margin-top: 0;
-            margin-bottom: 0.3rem;
         }
 
         .modal-poem-author {
@@ -754,7 +742,7 @@
                 </aside>
 
                 <div>
-                    <input type="text" id="searchInput" class="search-box" placeholder="search poem titles..." onkeyup="filterPoems()">
+                    <input type="text" id="searchInput" class="search-box" placeholder="search verses..." onkeyup="filterPoems()">
                     <div class="poem-feed" id="poemFeed"></div>
                     <div class="pagination-bar" id="paginationBar"></div>
                 </div>
@@ -771,10 +759,6 @@
             <h2>share your poetry</h2>
             <div class="success-msg" id="successMsg">✨ your poem has been shared to the community feed!</div>
             <form id="submissionForm" onsubmit="handlePoemSubmission(event)">
-                <div class="form-group">
-                    <label for="subTitle">poem title</label>
-                    <input type="text" id="subTitle" class="form-control" placeholder="enter title..." required>
-                </div>
                 <div class="form-group">
                     <label for="subAuthor">pen name (leave blank for anonymous)</label>
                     <input type="text" id="subAuthor" class="form-control" placeholder="e.g., jane doe or anonymous">
@@ -806,7 +790,6 @@
     <div class="modal-overlay" id="poemModal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-btn" onclick="forceCloseModal()">&times;</button>
-            <h3 class="modal-poem-title" id="modalTitle"></h3>
             <div class="modal-poem-author" id="modalAuthor"></div>
             <div class="modal-poem-body" id="modalBody"></div>
         </div>
@@ -836,24 +819,10 @@
     </footer>
 
     <script>
+        // add a 1 dollar fee if u want me to specifically look at it n comment/give tips myself later on n use dads paypal.
         const poems = [
             {
-                id: "poem-1",
-                title: "when you walk by",
-                mood: "devotion",
-                author: "readspeare archives",
-                text: `when you walk by, i smell roses.
-i turn and look, an angel i see
-your taste so sweet, it's almost unreal
-are you candy, my dear?
-are your tears this sweet?
-you just might be the one for me
-candy and mine, let's commit a crime.`,
-                notes: ""
-            },
-            {
                 id: "poem-2",
-                title: "i heard you died",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i heard you died, i left and cried
@@ -872,7 +841,6 @@ everything goes silent.`,
             },
             {
                 id: "poem-3",
-                title: "a butterfly rests on my eye",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `a butterfly rests on my eye
@@ -891,21 +859,7 @@ goodbye.`,
                 notes: ""
             },
             {
-                id: "poem-4",
-                title: "the figure awaits",
-                mood: "quiet",
-                author: "readspeare archives",
-                text: `the figure awaits,
-at the heavenly gates
-as tears roll down my face
-and i stand in vain
-"hell or heaven?" it uttered
-with a heavenly gaze`,
-                notes: ""
-            },
-            {
                 id: "poem-5",
-                title: "your smile awakes",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `your smile awakes,
@@ -919,19 +873,7 @@ your beautiful sea eyes, they drown in me.`,
                 notes: ""
             },
             {
-                id: "poem-6",
-                title: "but i matter more than you",
-                mood: "heartbreak",
-                author: "readspeare archives",
-                text: `"but i matter more than you"
-and.. yeah that may be true
-the way you said it, kinda rude
-but your point, i can't intrude.`,
-                notes: ""
-            },
-            {
                 id: "poem-7",
-                title: "his hoodie on my chair",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `his hoodie on my chair
@@ -946,7 +888,6 @@ if only love had kept its vault`,
             },
             {
                 id: "poem-8",
-                title: "his love and mine",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `his love and mine, a harmony
@@ -961,7 +902,6 @@ one more day until its lore.`,
             },
             {
                 id: "poem-9",
-                title: "as time drifts by",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `as time drifts by, you lure my mind
@@ -973,23 +913,7 @@ your presence lingers, never shy`,
                 notes: ""
             },
             {
-                id: "poem-10",
-                title: "thought it was love",
-                mood: "devotion",
-                author: "readspeare archives",
-                text: `thought it was love, my minds insane
-think it's enough, like a piece of grain
-too much, too little, i can't compare
-have to pick one, not fit for my haze
-it's only you who can make me gaze
-but my oh my, you look ablaze
-i watch, i ache, i stare, i pray
-until i go berserk one day`,
-                notes: ""
-            },
-            {
                 id: "poem-11",
-                title: "i see your eyes in every blue",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `i see your eyes in every blue,
@@ -1002,7 +926,6 @@ in every shade, i find your shape`,
             },
             {
                 id: "poem-12",
-                title: "your eyes like clouds",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `your eyes like clouds,
@@ -1015,7 +938,6 @@ my heart ablaze`,
             },
             {
                 id: "poem-13",
-                title: "your eyes, a sea",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `your eyes, a sea,
@@ -1030,7 +952,6 @@ it captivates me`,
             },
             {
                 id: "poem-14",
-                title: "i count the seconds",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i count the seconds, they stretch like days
@@ -1053,7 +974,6 @@ my heart stays chained, you are the one`,
             },
             {
                 id: "poem-15",
-                title: "the way you look",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `the way you look, the way you breathe
@@ -1068,7 +988,6 @@ i'm lost in you, in you i'm confined`,
             },
             {
                 id: "poem-16",
-                title: "i wish you were here",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `i wish you were here
@@ -1083,7 +1002,6 @@ your love consumes the edges of my soul`,
             },
             {
                 id: "poem-17",
-                title: "my ear bleeds of melodies",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `my ear bleeds of melodies
@@ -1100,7 +1018,6 @@ yet still i hold you close, my dear.`,
             },
             {
                 id: "poem-18",
-                title: "i can't stop thinking of you",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `i can't stop thinking of you
@@ -1115,7 +1032,6 @@ the one i hold in every night`,
             },
             {
                 id: "poem-19",
-                title: "empty halls call out my name",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `empty halls call out my name
@@ -1128,7 +1044,6 @@ my ears ring loud, they ache so proud`,
             },
             {
                 id: "poem-20",
-                title: "his hands in mine",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `his hands in mine, a destiny
@@ -1141,7 +1056,6 @@ mistaking quiet for being strong.`,
             },
             {
                 id: "poem-21",
-                title: "his voice echoes in my head",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `his voice echoes in my head
@@ -1155,7 +1069,6 @@ outside of me, not in my head..`,
             },
             {
                 id: "poem-22",
-                title: "i walk along an empty road",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i walk along an empty road
@@ -1170,7 +1083,6 @@ it feels as if the stars won't hear`,
             },
             {
                 id: "poem-23",
-                title: "the number that i once knew",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `the number that i once knew
@@ -1185,7 +1097,6 @@ i just want you back, i'm sorry from afar`,
             },
             {
                 id: "poem-24",
-                title: "i lie on the grass",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `i lie on the grass and stare at the sky
@@ -1203,7 +1114,6 @@ without you in sight`,
             },
             {
                 id: "poem-25",
-                title: "i lay with my eyes open",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `i lay with my eyes open, thinking of you
@@ -1217,7 +1127,6 @@ i love you so much, it aches at my core`,
             },
             {
                 id: "poem-26",
-                title: "my texts stay unread",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `my texts stay unread, still i stay calm
@@ -1234,7 +1143,6 @@ just silence where you used to lie.`,
             },
             {
                 id: "poem-27",
-                title: "i sit on my bed",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `i sit on my bed and lie down slow
@@ -1253,7 +1161,6 @@ can't see anymore, i can't feel them anymore`,
             },
             {
                 id: "poem-28",
-                title: "bought a new bed",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `bought a new bed, how exciting this is
@@ -1270,7 +1177,6 @@ just rest your thoughts inside your head`,
             },
             {
                 id: "poem-29",
-                title: "i pushed you away",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i pushed you away, to see if you'd stay
@@ -1283,7 +1189,6 @@ being forgotten was all i deserved anyway.`,
             },
             {
                 id: "poem-30",
-                title: "the quiet blows of wind",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `the quiet blows of wind seem to take over me
@@ -1295,7 +1200,6 @@ i seem to go unseen, like i'm not even here`,
             },
             {
                 id: "poem-31",
-                title: "i sat beneath the heavenly sky",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `i sat beneath the heavenly sky
@@ -1310,7 +1214,6 @@ i close my eyes, he's in my sight.`,
             },
             {
                 id: "poem-32",
-                title: "i bought myself a vase and a rose",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i bought myself a vase and a rose
@@ -1326,7 +1229,6 @@ it all falls down, nothing left to cling`,
             },
             {
                 id: "poem-33",
-                title: "i saw the sky you longed to see",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `i saw the sky you longed to see
@@ -1344,7 +1246,6 @@ he's the only thought that i find`,
             },
             {
                 id: "poem-34",
-                title: "the air felt lighter",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `the air felt lighter, almost like a breeze
@@ -1360,7 +1261,6 @@ its almost as if no tears had ever came down.`,
             },
             {
                 id: "poem-35",
-                title: "every second, it feels like an hour",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `every second, it feels like an hour
@@ -1374,7 +1274,6 @@ mate, you storm in like some bloody shower`,
             },
             {
                 id: "poem-36",
-                title: "i met a guy",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i met a guy
@@ -1394,7 +1293,6 @@ i stayed to please.`,
             },
             {
                 id: "poem-37",
-                title: "roses are red",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `roses are red
@@ -1405,7 +1303,6 @@ as pretty as you,,`,
             },
             {
                 id: "poem-38",
-                title: "the fire caught me by my heels",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `(slang rhymes)
@@ -1419,7 +1316,6 @@ but saved my life and lived a life.`,
             },
             {
                 id: "poem-39",
-                title: "i thought i died",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i thought i died
@@ -1436,7 +1332,6 @@ nothing ever lasts with you anymore.`,
             },
             {
                 id: "poem-40",
-                title: "those eyes that bled a thousand tears",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `those eyes that bled a thousand tears
@@ -1455,7 +1350,6 @@ yet gave away the love you hold`,
             },
             {
                 id: "poem-41",
-                title: "i think you were meant to be",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `i think you were meant to be
@@ -1473,7 +1367,6 @@ with wings so big they fill with light`,
             },
             {
                 id: "poem-42",
-                title: "to the morning i woke",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `to the morning i woke with blinds so bright,
@@ -1496,7 +1389,6 @@ i'm sorry for always pushing you away.`,
             },
             {
                 id: "poem-43",
-                title: "the quiet winds",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `the quiet winds, they wait for mе
@@ -1511,7 +1403,6 @@ the quiet warmth makes me complete.`,
             },
             {
                 id: "poem-44",
-                title: "the morning sunlight creeps inside",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `the morning sunlight creeps inside
@@ -1531,7 +1422,6 @@ we wouldn't be here, starting over again.`,
             },
             {
                 id: "poem-45",
-                title: "your haunting voice wakes me up",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `your haunting voice wakes me up
@@ -1542,7 +1432,6 @@ i think it might just be a bird.`,
             },
             {
                 id: "poem-46",
-                title: "quiet thoughts consume my soul",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `quiet thoughts consume my soul
@@ -1565,7 +1454,6 @@ a dream every girl would long to see`,
             },
             {
                 id: "poem-47",
-                title: "the morning feels incomplete without her",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `the morning feels incomplete without her.
@@ -1581,7 +1469,6 @@ just the depth i'm willing to go.`,
             },
             {
                 id: "poem-48",
-                title: "his eyes stand surrounding me",
                 mood: "quiet",
                 author: "readspeare archives",
                 text: `his eyes stand surrounding me
@@ -1603,7 +1490,6 @@ i can't escape this hellish (hell like) place.`,
             },
             {
                 id: "poem-49",
-                title: "tell me, tell me, will you please",
                 mood: "devotion",
                 author: "readspeare archives",
                 text: `tell me, tell me, will you please
@@ -1614,7 +1500,6 @@ just how much you mean to me`,
             },
             {
                 id: "poem-50",
-                title: "i promise that i didn't know",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `i promise that i didn't know
@@ -1630,7 +1515,6 @@ how much i'd hurt you long ago.`,
             },
             {
                 id: "poem-51",
-                title: "write here about poem 51 title",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `write here about poem 51 text`,
@@ -1638,7 +1522,6 @@ how much i'd hurt you long ago.`,
             },
             {
                 id: "poem-52",
-                title: "write here about poem 52 title",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `write here about poem 52 text`,
@@ -1646,7 +1529,6 @@ how much i'd hurt you long ago.`,
             },
             {
                 id: "poem-53",
-                title: "write here about poem 53 title",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `write here about poem 53 text`,
@@ -1654,7 +1536,6 @@ how much i'd hurt you long ago.`,
             },
             {
                 id: "poem-54",
-                title: "write here about poem 54 title",
                 mood: "heartbreak",
                 author: "readspeare archives",
                 text: `write here about poem 54 text`,
@@ -1765,12 +1646,11 @@ how much i'd hurt you long ago.`,
 
                 card.innerHTML = `
                     <div class="poem-card-header">
-                        <h3 class="poem-card-title">${escapeHTML(poem.title)}</h3>
+                        <div class="poem-card-author">by ${escapeHTML(poem.author || 'readspeare archives')}</div>
                         <button class="bookmark-btn ${isSaved ? 'saved' : ''}" onclick="toggleBookmark('${poemKey}', this)" title="save this poem">
                             ${isSaved ? '✨ saved' : '🤍 save'}
                         </button>
                     </div>
-                    <div class="poem-card-author">by ${escapeHTML(poem.author || 'readspeare archives')}</div>
                     <div class="poem-card-body">${escapeHTML(poem.text)}</div>
                     ${notesHTML}
                     <div class="star-rating-bar">
@@ -1791,9 +1671,9 @@ how much i'd hurt you long ago.`,
 
             if (totalPages > 1) {
                 paginationBar.innerHTML = `
-                    <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&lt; prev</button>
-                    <span class="page-indicator">page ${currentPage} out of ${totalPages}</span>
-                    <button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>next &gt;</button>
+                    <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>prev</button>
+                    <span class="page-indicator">${currentPage} &lt; ${totalPages}</span>
+                    <button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>next</button>
                 `;
             }
         }
@@ -1839,7 +1719,7 @@ how much i'd hurt you long ago.`,
                     currentMood === "all" ? true :
                     currentMood === "saved" ? savedBookmarks.includes(poemKey) :
                     p.mood === currentMood;
-                const matchesQuery = p.title.toLowerCase().includes(query);
+                const matchesQuery = p.text.toLowerCase().includes(query);
                 return matchesMood && matchesQuery;
             });
             renderPoems(filtered, 1);
@@ -1858,9 +1738,10 @@ how much i'd hurt you long ago.`,
                 return;
             }
             communityPoems.forEach((poem) => {
+                const firstLine = poem.text.split('\n')[0].slice(0, 32);
                 const btn = document.createElement("button");
                 btn.className = "poem-btn";
-                btn.innerHTML = `${escapeHTML(poem.title)}<br><span style="font-size:0.8rem; font-family:'Inter', sans-serif; color:var(--meta-color); font-style:italic;">by ${escapeHTML(poem.author || 'anonymous')}</span>`;
+                btn.innerHTML = `${escapeHTML(firstLine)}...<br><span style="font-size:0.8rem; font-family:'Inter', sans-serif; color:var(--meta-color); font-style:italic;">by ${escapeHTML(poem.author || 'anonymous')}</span>`;
                 btn.onclick = () => openPoem(poem);
                 communityGrid.appendChild(btn);
             });
@@ -1868,13 +1749,12 @@ how much i'd hurt you long ago.`,
 
         function handlePoemSubmission(event) {
             event.preventDefault();
-            const title = document.getElementById("subTitle").value.trim().toLowerCase();
             let author = document.getElementById("subAuthor").value.trim().toLowerCase();
             const text = document.getElementById("subText").value.trim().toLowerCase();
 
             if (!author) author = "anonymous";
 
-            const newPoem = { title, author, text };
+            const newPoem = { author, text };
             communityPoems.unshift(newPoem);
             localStorage.setItem("readspeare_community", JSON.stringify(communityPoems));
 
@@ -1890,7 +1770,6 @@ how much i'd hurt you long ago.`,
         }
 
         function openPoem(poem) {
-            document.getElementById("modalTitle").textContent = poem.title;
             document.getElementById("modalAuthor").textContent = `by ${poem.author || 'anonymous'}`;
             document.getElementById("modalBody").textContent = poem.text;
             document.getElementById("poemModal").style.display = "flex";
