@@ -386,6 +386,16 @@
             opacity: 1;
         }
 
+        .coming-soon-note {
+            text-align: center;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            margin-top: 2rem;
+            margin-bottom: 0;
+        }
+
         .pagination-bar {
             display: flex;
             align-items: center;
@@ -515,26 +525,6 @@
             font-size: 1.1rem;
             color: var(--text-color);
             margin-bottom: 2rem;
-        }
-
-        .tip-card {
-            background: var(--card-bg);
-            padding: 1.8rem;
-            border-radius: 6px;
-            margin-bottom: 1.2rem;
-            border: 1px solid var(--border-color);
-            border-left: 4px solid var(--accent-color);
-        }
-
-        .tip-card h3 {
-            margin-top: 0;
-            font-family: 'Lora', serif;
-            font-size: 1.2rem;
-        }
-
-        .tip-card p {
-            margin-bottom: 0;
-            color: var(--meta-color);
         }
 
         .form-group {
@@ -697,7 +687,6 @@
             <button class="nav-btn active" onclick="switchTab('poetry', this)">poetry library</button>
             <button class="nav-btn" onclick="switchTab('community', this)">community feed</button>
             <button class="nav-btn" onclick="switchTab('submit', this)">submit poetry</button>
-            <button class="nav-btn" onclick="switchTab('tips', this)">writing tips</button>
         </nav>
     </header>
 
@@ -752,6 +741,7 @@
                 <div>
                     <input type="text" id="searchInput" class="search-box" placeholder="search verses..." onkeyup="filterPoems()">
                     <div class="poem-feed" id="poemFeed"></div>
+                    <p class="coming-soon-note" id="comingSoonNote" style="display: none;">more poems coming soon! :3</p>
                     <div class="pagination-bar" id="paginationBar"></div>
                 </div>
             </div>
@@ -769,7 +759,7 @@
             <form id="submissionForm" onsubmit="handlePoemSubmission(event)">
                 <div class="form-group">
                     <label for="subTitle">poem title (optional)</label>
-                    <input type="text" id="subTitle" class="form-control" placeholder="leave blank if untitled">
+                    <input type="text" id="subTitle" class="form-control" placeholder="leave blank if untitled...">
                 </div>
                 <div class="form-group">
                     <label for="subAuthor">pen name (leave blank for anonymous)</label>
@@ -777,24 +767,10 @@
                 </div>
                 <div class="form-group">
                     <label for="subText">poem verse</label>
-                    <textarea id="subText" class="form-control" placeholder="write your poetry here.. press enter for new lines." required></textarea>
+                    <textarea id="subText" class="form-control" placeholder="write your poetry here... press enter for new lines." required></textarea>
                 </div>
                 <button type="submit" class="submit-btn">publish to community</button>
             </form>
-        </section>
-
-        <section id="tips" class="tab-section">
-            <h2>writing tips & ideas</h2>
-            
-            <div class="tip-card">
-                <h3>write here about tip 1 heading</h3>
-                <p>write here about tip 1 content</p>
-            </div>
-
-            <div class="tip-card">
-                <h3>write here about tip 2 heading</h3>
-                <p>write here about tip 2 content</p>
-            </div>
         </section>
 
     </div>
@@ -1318,7 +1294,8 @@ as pretty as you,,`,
                 id: "poem-38",
                 mood: "heartbreak",
                 author: "readspeare archives",
-                text: `the fire caught me by my heels
+                text: `(slang rhymes)
+the fire caught me by my heels
 i tried to save you but i couldn't see
 the morning light crept in from seams
 it's time to go, finally time to leave
@@ -1524,34 +1501,6 @@ the weight my words had come to be
 i didn't know, i didn't know
 how much i'd hurt you long ago.`,
                 notes: ""
-            },
-            {
-                id: "poem-51",
-                mood: "heartbreak",
-                author: "readspeare archives",
-                text: `write here about poem 51 text`,
-                notes: ""
-            },
-            {
-                id: "poem-52",
-                mood: "heartbreak",
-                author: "readspeare archives",
-                text: `write here about poem 52 text`,
-                notes: ""
-            },
-            {
-                id: "poem-53",
-                mood: "heartbreak",
-                author: "readspeare archives",
-                text: `write here about poem 53 text`,
-                notes: ""
-            },
-            {
-                id: "poem-54",
-                mood: "heartbreak",
-                author: "readspeare archives",
-                text: `write here about poem 54 text`,
-                notes: ""
             }
         ];
 
@@ -1562,8 +1511,10 @@ how much i'd hurt you long ago.`,
 
         const starMessages = {
             1: "thank you for reading & leaving a star! 🤍",
-            2: "two stars!! thank you so much, this means the world ✨",
-            3: "three stars!! you just made my whole day, thank you 🌷"
+            2: "two stars!! thank you for reading 🤍",
+            3: "three stars!! thank you so much, this means the world ✨",
+            4: "four stars!! you're so sweet, thank you 🌷",
+            5: "five stars!! you just made my whole day, thank you 🌼"
         };
         let savedRatings = JSON.parse(localStorage.getItem("readspeare_ratings")) || {};
         let savedBookmarks = JSON.parse(localStorage.getItem("readspeare_bookmarks")) || [];
@@ -1616,6 +1567,7 @@ how much i'd hurt you long ago.`,
         }
 
         const poemFeed = document.getElementById("poemFeed");
+        const comingSoonNote = document.getElementById("comingSoonNote");
         const paginationBar = document.getElementById("paginationBar");
         const communityGrid = document.getElementById("communityGrid");
 
@@ -1624,6 +1576,7 @@ how much i'd hurt you long ago.`,
             currentPage = page;
             poemFeed.innerHTML = "";
             paginationBar.innerHTML = "";
+            comingSoonNote.style.display = "none";
 
             if (list.length === 0) {
                 const emptyText = currentMood === "saved"
@@ -1671,6 +1624,8 @@ how much i'd hurt you long ago.`,
                             <button class="star-btn ${currentRating >= 1 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 1, this)" title="1 star">★</button>
                             <button class="star-btn ${currentRating >= 2 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 2, this)" title="2 stars">★</button>
                             <button class="star-btn ${currentRating >= 3 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 3, this)" title="3 stars">★</button>
+                            <button class="star-btn ${currentRating >= 4 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 4, this)" title="4 stars">★</button>
+                            <button class="star-btn ${currentRating >= 5 ? 'lit' : ''}" onclick="ratePoem('${poemKey}', 5, this)" title="5 stars">★</button>
                         </div>
                         <span class="star-thank-you ${currentRating > 0 ? 'visible' : ''}" id="msg-${poemKey}">
                             ${currentRating > 0 ? starMessages[currentRating] : ''}
@@ -1680,6 +1635,10 @@ how much i'd hurt you long ago.`,
 
                 poemFeed.appendChild(card);
             });
+
+            if (currentPage === totalPages && currentMood !== "saved") {
+                comingSoonNote.style.display = "block";
+            }
 
             if (totalPages > 1) {
                 paginationBar.innerHTML = `
