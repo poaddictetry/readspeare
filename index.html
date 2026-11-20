@@ -269,6 +269,46 @@
             opacity: 1;
         }
 
+        /* Pagination Bar */
+        .pagination-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 2.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .page-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.45rem 0.95rem;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: border-color 0.2s ease, color 0.2s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .page-indicator {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: var(--meta-color);
+        }
+
         /* Community Grid */
         .poem-grid {
             display: grid;
@@ -522,6 +562,15 @@
             border-top: 1px solid var(--border-color);
             background-color: var(--footer-bg);
         }
+
+        .footer-quote {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 0.82rem;
+            color: var(--accent-color);
+            margin: 0 0 0.65rem 0;
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
@@ -545,6 +594,7 @@
             <h2>Curated Poetry</h2>
             <input type="text" id="searchInput" class="search-box" placeholder="Search poem titles..." onkeyup="filterPoems()">
             <div class="poem-feed" id="poemFeed"></div>
+            <div class="pagination-bar" id="paginationBar"></div>
         </section>
 
         <!-- COMMUNITY FEED SECTION -->
@@ -622,14 +672,15 @@
     </div>
 
     <footer>
-        <p>new beginnings start here.</p>
+        <p class="footer-quote">"being a poet means winning every 'i love you more.' and it's true." — by me</p>
+        <p style="margin: 0;">new beginnings start here.</p>
     </footer>
 
     <script>
         const poems = [
             {
                 id: "poem-1",
-                title: "when you walk by",
+                title: "candy",
                 author: "readspeare archives",
                 text: `when you walk by, i smell roses.
 i turn and look, an angel i see
@@ -642,7 +693,7 @@ candy and mine, let's commit a crime.`,
             },
             {
                 id: "poem-2",
-                title: "i heard you died",
+                title: "23/5",
                 author: "readspeare archives",
                 text: `i heard you died, i left and cried
 my tears so deep, i bleached my shirt.
@@ -660,7 +711,7 @@ everything goes silent.`,
             },
             {
                 id: "poem-3",
-                title: "a butterfly rests on my eye",
+                title: "butterfly",
                 author: "readspeare archives",
                 text: `a butterfly rests on my eye
 i freeze, not even a sigh
@@ -679,7 +730,7 @@ goodbye.`,
             },
             {
                 id: "poem-4",
-                title: "the figure awaits",
+                title: "heavenly gates",
                 author: "readspeare archives",
                 text: `the figure awaits,
 at the heavenly gates
@@ -691,7 +742,7 @@ with a heavenly gaze`,
             },
             {
                 id: "poem-5",
-                title: "your smile awakes",
+                title: "sea eyes",
                 author: "readspeare archives",
                 text: `your smile awakes,
 there lies a little tale
@@ -715,7 +766,7 @@ but your point, i can't intrude.`,
             },
             {
                 id: "poem-7",
-                title: "his hoodie on my chair",
+                title: "his hoodie",
                 author: "readspeare archives",
                 text: `his hoodie on my chair
 the scent of him still there
@@ -769,7 +820,7 @@ until i go berserk one day`,
             },
             {
                 id: "poem-11",
-                title: "i see your eyes in every blue",
+                title: "every blue",
                 author: "readspeare archives",
                 text: `i see your eyes in every blue,
 it seems so pretty, like a hue
@@ -781,7 +832,7 @@ in every shade, i find your shape`,
             },
             {
                 id: "poem-12",
-                title: "your eyes like clouds",
+                title: "clouds",
                 author: "readspeare archives",
                 text: `your eyes like clouds,
 they draw me in
@@ -793,7 +844,7 @@ my heart ablaze`,
             },
             {
                 id: "poem-13",
-                title: "your eyes, a sea",
+                title: "the sea",
                 author: "readspeare archives",
                 text: `your eyes, a sea,
 they swallow me whole
@@ -857,7 +908,7 @@ your love consumes the edges of my soul`,
             },
             {
                 id: "poem-17",
-                title: "my ear bleeds of melodies",
+                title: "melodies",
                 author: "readspeare archives",
                 text: `my ear bleeds of melodies
 your beautiful voice ignites in me
@@ -911,7 +962,7 @@ mistaking quiet for being strong.`,
             },
             {
                 id: "poem-21",
-                title: "his voice echoes in my head",
+                title: "in my head",
                 author: "readspeare archives",
                 text: `his voice echoes in my head
 in the hallways, in my head
@@ -924,7 +975,7 @@ outside of me, not in my head..`,
             },
             {
                 id: "poem-22",
-                title: "i walk along an empty road",
+                title: "empty road",
                 author: "readspeare archives",
                 text: `i walk along an empty road
 carrying all this silent load
@@ -982,7 +1033,7 @@ i love you so much, it aches at my core`,
             },
             {
                 id: "poem-26",
-                title: "my texts stay unread",
+                title: "unread",
                 author: "readspeare archives",
                 text: `my texts stay unread, still i stay calm
 trying to quiet the fear in my palm
@@ -1016,7 +1067,7 @@ can't see anymore, i can't feel them anymore`,
             },
             {
                 id: "poem-28",
-                title: "bought a new bed",
+                title: "new bed",
                 author: "readspeare archives",
                 text: `bought a new bed, how exciting this is
 i unpack and i've got a brand new bliss
@@ -1044,7 +1095,7 @@ being forgotten was all i deserved anyway.`,
             },
             {
                 id: "poem-30",
-                title: "the quiet blows of wind",
+                title: "unseen",
                 author: "readspeare archives",
                 text: `the quiet blows of wind seem to take over me
 it makes me feel so free, almost way too
@@ -1055,7 +1106,7 @@ i seem to go unseen, like i'm not even here`,
             },
             {
                 id: "poem-31",
-                title: "beneath the heavenly sky",
+                title: "the sky",
                 author: "readspeare archives",
                 text: `i sat beneath the heavenly sky
 the raindrops fall, and time drifts by
@@ -1069,7 +1120,7 @@ i close my eyes, he's in my sight.`,
             },
             {
                 id: "poem-32",
-                title: "a vase and a rose",
+                title: "vase and rose",
                 author: "readspeare archives",
                 text: `i bought myself a vase and a rose
 held them so tight against my bones
@@ -1101,7 +1152,7 @@ he's the only thought that i find`,
             },
             {
                 id: "poem-34",
-                title: "the air felt lighter",
+                title: "the breeze",
                 author: "readspeare archives",
                 text: `the air felt lighter, almost like a breeze
 its the very first time i really felt at ease
@@ -1129,7 +1180,7 @@ mate, you storm in like some bloody shower`,
             },
             {
                 id: "poem-36",
-                title: "i met a guy",
+                title: "i stayed to please",
                 author: "readspeare archives",
                 text: `i met a guy
 he made me cry,
@@ -1158,7 +1209,7 @@ as pretty as you,,`,
             },
             {
                 id: "poem-38",
-                title: "the fire caught me by my heels",
+                title: "the fire",
                 author: "readspeare archives",
                 text: `(slang rhymes)
 the fire caught me by my heels
@@ -1205,7 +1256,7 @@ yet gave away the love you hold`,
             },
             {
                 id: "poem-41",
-                title: "an angel of the hierarchies",
+                title: "angel",
                 author: "readspeare archives",
                 text: `i think you were meant to be
 an angel of the hierarchies
@@ -1222,7 +1273,7 @@ with wings so big they fill with light`,
             },
             {
                 id: "poem-42",
-                title: "to the morning i woke",
+                title: "i'm sorry",
                 author: "readspeare archives",
                 text: `to the morning i woke with blinds so bright,
 i'm sorry to you for hiding from your light.
@@ -1244,7 +1295,7 @@ i'm sorry for always pushing you away.`,
             },
             {
                 id: "poem-43",
-                title: "the quiet winds",
+                title: "the wind",
                 author: "readspeare archives",
                 text: `the quiet winds, they wait for mе
 like children waiting by the sea
@@ -1277,7 +1328,7 @@ we wouldn't be here, starting over again.`,
             },
             {
                 id: "poem-45",
-                title: "your haunting voice wakes me up",
+                title: "a bird",
                 author: "readspeare archives",
                 text: `your haunting voice wakes me up
 a whisper crawling through the silence
@@ -1324,7 +1375,7 @@ just the depth i'm willing to go.`,
             },
             {
                 id: "poem-48",
-                title: "his eyes stand surrounding me",
+                title: "his eyes",
                 author: "readspeare archives",
                 text: `his eyes stand surrounding me
 it feels like more than just a breeze
@@ -1367,8 +1418,36 @@ the weight my words had come to be
 i didn't know, i didn't know
 how much i'd hurt you long ago.`,
                 notes: ""
+            },
+            {
+                id: "poem-51",
+                title: "WRITE HERE ABOUT POEM 51 TITLE",
+                author: "readspeare archives",
+                text: `WRITE HERE ABOUT POEM 51 TEXT
+(PRESS ENTER FOR NEW LINES)`,
+                notes: ""
+            },
+            {
+                id: "poem-52",
+                title: "WRITE HERE ABOUT POEM 52 TITLE",
+                author: "readspeare archives",
+                text: `WRITE HERE ABOUT POEM 52 TEXT
+(PRESS ENTER FOR NEW LINES)`,
+                notes: ""
+            },
+            {
+                id: "poem-53",
+                title: "WRITE HERE ABOUT POEM 53 TITLE",
+                author: "readspeare archives",
+                text: `WRITE HERE ABOUT POEM 53 TEXT
+(PRESS ENTER FOR NEW LINES)`,
+                notes: ""
             }
         ];
+
+        const POEMS_PER_PAGE = 5;
+        let currentPage = 1;
+        let currentFilteredPoems = poems;
 
         const starMessages = {
             1: "thank you for reading & leaving a star! 🤍",
@@ -1390,17 +1469,29 @@ if (!Array.isArray(communityPoems)) communityPoems = [];
         }
 
         const poemFeed = document.getElementById("poemFeed");
+        const paginationBar = document.getElementById("paginationBar");
         const communityGrid = document.getElementById("communityGrid");
 
-        function renderPoems(list) {
+        function renderPoems(list, page = 1) {
+            currentFilteredPoems = list;
+            currentPage = page;
             poemFeed.innerHTML = "";
+            paginationBar.innerHTML = "";
+
             if (list.length === 0) {
                 poemFeed.innerHTML = `<p style="color:var(--meta-color);">No poems found matching your search.</p>`;
                 return;
             }
 
-            list.forEach((poem, idx) => {
-                const poemKey = poem.id || `poem-idx-${idx}`;
+            const totalPages = Math.ceil(list.length / POEMS_PER_PAGE);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIdx = (currentPage - 1) * POEMS_PER_PAGE;
+            const pageItems = list.slice(startIdx, startIdx + POEMS_PER_PAGE);
+
+            pageItems.forEach((poem, idx) => {
+                const poemKey = poem.id || `poem-idx-${startIdx + idx}`;
                 const currentRating = savedRatings[poemKey] || 0;
 
                 const card = document.createElement("article");
@@ -1434,6 +1525,19 @@ if (!Array.isArray(communityPoems)) communityPoems = [];
 
                 poemFeed.appendChild(card);
             });
+
+            if (totalPages > 1) {
+                paginationBar.innerHTML = `
+                    <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>&lt; prev</button>
+                    <span class="page-indicator">page ${currentPage} out of ${totalPages}</span>
+                    <button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>next &gt;</button>
+                `;
+            }
+        }
+
+        function changePage(newPage) {
+            renderPoems(currentFilteredPoems, newPage);
+            document.getElementById("poetry").scrollIntoView({ behavior: 'smooth' });
         }
 
         function ratePoem(poemKey, stars, btnElement) {
@@ -1467,7 +1571,7 @@ if (!Array.isArray(communityPoems)) communityPoems = [];
         function filterPoems() {
             const query = document.getElementById("searchInput").value.toLowerCase();
             const filtered = poems.filter(p => p.title.toLowerCase().includes(query));
-            renderPoems(filtered);
+            renderPoems(filtered, 1);
         }
 
         function escapeHTML(str) {
@@ -1562,7 +1666,7 @@ if (!Array.isArray(communityPoems)) communityPoems = [];
         htmlElement.setAttribute("data-theme", savedTheme);
         updateThemeIcon(savedTheme);
 
-        renderPoems(poems);
+        renderPoems(poems, 1);
         renderCommunityPoems();
     </script>
 
