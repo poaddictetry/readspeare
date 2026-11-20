@@ -493,6 +493,14 @@
             color: var(--text-color);
         }
 
+        .modal-poem-title {
+            font-family: 'Lora', serif;
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 0.3rem;
+        }
+
         .modal-poem-author {
             font-size: 0.9rem;
             color: var(--meta-color);
@@ -760,6 +768,10 @@
             <div class="success-msg" id="successMsg">✨ your poem has been shared to the community feed!</div>
             <form id="submissionForm" onsubmit="handlePoemSubmission(event)">
                 <div class="form-group">
+                    <label for="subTitle">poem title (optional)</label>
+                    <input type="text" id="subTitle" class="form-control" placeholder="leave blank if untitled...">
+                </div>
+                <div class="form-group">
                     <label for="subAuthor">pen name (leave blank for anonymous)</label>
                     <input type="text" id="subAuthor" class="form-control" placeholder="e.g., jane doe or anonymous">
                 </div>
@@ -790,6 +802,7 @@
     <div class="modal-overlay" id="poemModal" onclick="closeModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="close-btn" onclick="forceCloseModal()">&times;</button>
+            <h3 class="modal-poem-title" id="modalTitle" style="display: none;"></h3>
             <div class="modal-poem-author" id="modalAuthor"></div>
             <div class="modal-poem-body" id="modalBody"></div>
         </div>
@@ -1738,10 +1751,14 @@ how much i'd hurt you long ago.`,
                 return;
             }
             communityPoems.forEach((poem) => {
-                const firstLine = poem.text.split('\n')[0].slice(0, 32);
+                const hasTitle = poem.title && poem.title.trim() !== "";
+                const label = hasTitle
+                    ? escapeHTML(poem.title)
+                    : `${escapeHTML(poem.text.split('\n')[0].slice(0, 32))}...`;
+                const labelStyle = hasTitle ? "font-style: normal; font-weight: 600;" : "font-style: italic;";
                 const btn = document.createElement("button");
                 btn.className = "poem-btn";
-                btn.innerHTML = `${escapeHTML(firstLine)}...<br><span style="font-size:0.8rem; font-family:'Inter', sans-serif; color:var(--meta-color); font-style:italic;">by ${escapeHTML(poem.author || 'anonymous')}</span>`;
+                btn.innerHTML = `<span style="${labelStyle}">${label}</span><br><span style="font-size:0.8rem; font-family:'Inter', sans-serif; color:var(--meta-color); font-style:italic;">by ${escapeHTML(poem.author || 'anonymous')}</span>`;
                 btn.onclick = () => openPoem(poem);
                 communityGrid.appendChild(btn);
             });
@@ -1749,12 +1766,13 @@ how much i'd hurt you long ago.`,
 
         function handlePoemSubmission(event) {
             event.preventDefault();
+            const title = document.getElementById("subTitle").value.trim().toLowerCase();
             let author = document.getElementById("subAuthor").value.trim().toLowerCase();
             const text = document.getElementById("subText").value.trim().toLowerCase();
 
             if (!author) author = "anonymous";
 
-            const newPoem = { author, text };
+            const newPoem = { title, author, text };
             communityPoems.unshift(newPoem);
             localStorage.setItem("readspeare_community", JSON.stringify(communityPoems));
 
@@ -1770,6 +1788,14 @@ how much i'd hurt you long ago.`,
         }
 
         function openPoem(poem) {
+            const modalTitleEl = document.getElementById("modalTitle");
+            if (poem.title && poem.title.trim() !== "") {
+                modalTitleEl.textContent = poem.title;
+                modalTitleEl.style.display = "block";
+            } else {
+                modalTitleEl.textContent = "";
+                modalTitleEl.style.display = "none";
+            }
             document.getElementById("modalAuthor").textContent = `by ${poem.author || 'anonymous'}`;
             document.getElementById("modalBody").textContent = poem.text;
             document.getElementById("poemModal").style.display = "flex";
