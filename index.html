@@ -442,25 +442,53 @@
             gap: 1rem;
         }
 
-        .poem-btn {
+        .community-item {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            padding: 1.2rem 1.4rem;
             border-radius: 6px;
+            padding: 1.2rem 1.4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.8rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+
+        .community-item:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .poem-btn {
+            background: none;
+            border: none;
+            padding: 0;
             text-align: left;
             font-family: 'Lora', serif;
             font-style: italic;
             font-size: 1rem;
             color: var(--text-color);
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.02);
         }
 
-        .poem-btn:hover {
-            border-color: var(--accent-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        .remove-poem-btn {
+            align-self: flex-start;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--meta-color);
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .remove-poem-btn:hover {
+            border-color: #b45346;
+            color: #b45346;
         }
 
         .modal-overlay {
@@ -473,6 +501,76 @@
             align-items: center;
             padding: 1.5rem;
             z-index: 1000;
+        }
+
+        .confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem;
+            z-index: 1100;
+        }
+
+        .confirm-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 10px;
+            max-width: 380px;
+            width: 100%;
+            padding: 1.6rem 1.8rem;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+            text-align: center;
+        }
+
+        .confirm-text {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text-color);
+            margin: 0 0 1.3rem 0;
+        }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .confirm-keep-btn {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 0.5rem 1.1rem;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .confirm-keep-btn:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .confirm-delete-btn {
+            background: var(--accent-color);
+            border: 1px solid var(--accent-color);
+            color: #ffffff;
+            padding: 0.5rem 1.15rem;
+            border-radius: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        .confirm-delete-btn:hover {
+            opacity: 0.92;
         }
 
         .modal-content {
@@ -781,6 +879,17 @@
             <h3 class="modal-poem-title" id="modalTitle" style="display: none;"></h3>
             <div class="modal-poem-author" id="modalAuthor"></div>
             <div class="modal-poem-body" id="modalBody"></div>
+            <div id="modalActions"></div>
+        </div>
+    </div>
+
+    <div class="confirm-overlay" id="confirmRemoveOverlay" onclick="closeConfirmOverlay(event)">
+        <div class="confirm-box" onclick="event.stopPropagation()">
+            <p class="confirm-text">are you sure? i'd love to see this! :3</p>
+            <div class="confirm-actions">
+                <button type="button" class="confirm-keep-btn" onclick="cancelRemovePoem()">keep it</button>
+                <button type="button" class="confirm-delete-btn" onclick="confirmRemovePoem()">remove it</button>
+            </div>
         </div>
     </div>
 
@@ -809,7 +918,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAyi0v7V_ZB5iVlFtuwzPFOx7uFgbeuGNk",
@@ -824,6 +933,61 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const communityRef = collection(db, "community_poems");
+
+        let ownedPoemIds = JSON.parse(localStorage.getItem("readspeare_owned_poems")) || [];
+        if (!Array.isArray(ownedPoemIds)) ownedPoemIds = [];
+        let pendingRemoveDocId = null;
+
+        function markPoemOwned(docId) {
+            if (!docId) return;
+            if (!ownedPoemIds.includes(docId)) {
+                ownedPoemIds.push(docId);
+                localStorage.setItem("readspeare_owned_poems", JSON.stringify(ownedPoemIds));
+            }
+        }
+
+        function unmarkPoemOwned(docId) {
+            ownedPoemIds = ownedPoemIds.filter(id => id !== docId);
+            localStorage.setItem("readspeare_owned_poems", JSON.stringify(ownedPoemIds));
+        }
+
+        function isPoemOwner(poem) {
+            return Boolean(poem && poem.id && ownedPoemIds.includes(poem.id));
+        }
+
+        window.removeCommunityPoem = function(docId) {
+            if (!docId || !ownedPoemIds.includes(docId)) return;
+            pendingRemoveDocId = docId;
+            document.getElementById("confirmRemoveOverlay").style.display = "flex";
+        };
+
+        window.cancelRemovePoem = function() {
+            pendingRemoveDocId = null;
+            document.getElementById("confirmRemoveOverlay").style.display = "none";
+        };
+
+        window.closeConfirmOverlay = function(event) {
+            if (event.target.id === "confirmRemoveOverlay") {
+                cancelRemovePoem();
+            }
+        };
+
+        window.confirmRemovePoem = async function() {
+            const docId = pendingRemoveDocId;
+            if (!docId || !ownedPoemIds.includes(docId)) {
+                cancelRemovePoem();
+                return;
+            }
+            try {
+                await deleteDoc(doc(db, "community_poems", docId));
+                unmarkPoemOwned(docId);
+                cancelRemovePoem();
+                forceCloseModal();
+            } catch (err) {
+                cancelRemovePoem();
+                alert("could not remove poem right now—check your firestore rules.");
+            }
+        };
 
         const poems = [
             {
@@ -1728,17 +1892,34 @@ how much i'd hurt you long ago.`,
                     ? escapeHTML(poem.title)
                     : `${escapeHTML(poem.text.split('\n')[0].slice(0, 32))}...`;
                 const labelStyle = hasTitle ? "font-style: normal; font-weight: 600;" : "font-style: italic;";
+
+                const item = document.createElement("div");
+                item.className = "community-item";
+
                 const btn = document.createElement("button");
                 btn.className = "poem-btn";
                 btn.innerHTML = `<span style="${labelStyle}">${label}</span><br><span style="font-size:0.8rem; font-family:'Inter', sans-serif; color:var(--meta-color); font-style:italic;">by ${escapeHTML(poem.author || 'anonymous')}</span>`;
                 btn.onclick = () => openPoem(poem);
-                communityGrid.appendChild(btn);
+                item.appendChild(btn);
+
+                if (isPoemOwner(poem)) {
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "remove-poem-btn";
+                    removeBtn.textContent = "remove";
+                    removeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        window.removeCommunityPoem(poem.id);
+                    };
+                    item.appendChild(removeBtn);
+                }
+
+                communityGrid.appendChild(item);
             });
         }
 
         const q = query(communityRef, orderBy("createdAt", "desc"));
         onSnapshot(q, (snapshot) => {
-            communityPoems = snapshot.docs.map(doc => doc.data());
+            communityPoems = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderCommunityPoems();
         });
 
@@ -1751,12 +1932,13 @@ how much i'd hurt you long ago.`,
             if (!author) author = "anonymous";
 
             try {
-                await addDoc(communityRef, {
+                const docRef = await addDoc(communityRef, {
                     title,
                     author,
                     text,
                     createdAt: serverTimestamp()
                 });
+                markPoemOwned(docRef.id);
 
                 document.getElementById("submissionForm").reset();
                 const successMsg = document.getElementById("successMsg");
@@ -1766,7 +1948,7 @@ how much i'd hurt you long ago.`,
                     successMsg.style.display = "none";
                 }, 5000);
             } catch (err) {
-                alert("could not publish right now—make sure firestore database is created in test mode!");
+                alert("could not publish right now—make sure firestore database is created and rules allow writes!");
             }
         };
 
@@ -1781,6 +1963,17 @@ how much i'd hurt you long ago.`,
             }
             document.getElementById("modalAuthor").textContent = `by ${poem.author || 'anonymous'}`;
             document.getElementById("modalBody").textContent = poem.text;
+
+            const modalActionsEl = document.getElementById("modalActions");
+            modalActionsEl.innerHTML = "";
+            if (isPoemOwner(poem)) {
+                const removeBtn = document.createElement("button");
+                removeBtn.className = "remove-poem-btn";
+                removeBtn.textContent = "remove poem";
+                removeBtn.onclick = () => window.removeCommunityPoem(poem.id);
+                modalActionsEl.appendChild(removeBtn);
+            }
+
             document.getElementById("poemModal").style.display = "flex";
         }
 
