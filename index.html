@@ -807,7 +807,24 @@
         <p style="margin: 0;">new beginnings start here.</p>
     </footer>
 
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAyi0v7V_ZB5iVlFtuwzPFOx7uFgbeuGNk",
+            authDomain: "readspeare.firebaseapp.com",
+            projectId: "readspeare",
+            storageBucket: "readspeare.firebasestorage.app",
+            messagingSenderId: "125102523258",
+            appId: "1:125102523258:web:91d2ab24c738d837eb4cc3",
+            measurementId: "G-SK76BM02NF"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const communityRef = collection(db, "community_poems");
+
         // add a 1 dollar fee if u want me to specifically look at it n comment/give tips myself later on n use dads paypal.
         const poems = [
             {
@@ -1508,6 +1525,7 @@ how much i'd hurt you long ago.`,
         let currentPage = 1;
         let currentMood = "all";
         let currentFilteredPoems = poems;
+        let communityPoems = [];
 
         const starMessages = {
             1: "thank you for reading & leaving a star! 🤍",
@@ -1520,9 +1538,6 @@ how much i'd hurt you long ago.`,
         let savedBookmarks = JSON.parse(localStorage.getItem("readspeare_bookmarks")) || [];
         if (!Array.isArray(savedBookmarks)) savedBookmarks = [];
 
-        let communityPoems = JSON.parse(localStorage.getItem("readspeare_community") || "[]");
-        if (!Array.isArray(communityPoems)) communityPoems = [];
-
         function updateMoodCounts() {
             document.getElementById("count-all").textContent = poems.length;
             document.getElementById("count-devotion").textContent = poems.filter(p => p.mood === "devotion").length;
@@ -1531,14 +1546,14 @@ how much i'd hurt you long ago.`,
             document.getElementById("count-saved").textContent = savedBookmarks.length;
         }
 
-        function selectMood(mood, btnElement) {
+        window.selectMood = function(mood, btnElement) {
             currentMood = mood;
             document.querySelectorAll('.mood-box').forEach(box => box.classList.remove('active'));
             btnElement.classList.add('active');
             filterPoems();
-        }
+        };
 
-        function toggleBookmark(poemKey, btnElement) {
+        window.toggleBookmark = function(poemKey, btnElement) {
             const index = savedBookmarks.indexOf(poemKey);
             if (index === -1) {
                 savedBookmarks.push(poemKey);
@@ -1555,16 +1570,16 @@ how much i'd hurt you long ago.`,
             if (currentMood === "saved") {
                 filterPoems();
             }
-        }
+        };
 
-        function switchTab(tabId, btnElement) {
+        window.switchTab = function(tabId, btnElement) {
             document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             
             document.getElementById(tabId).classList.add('active');
             btnElement.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        };
 
         const poemFeed = document.getElementById("poemFeed");
         const comingSoonNote = document.getElementById("comingSoonNote");
@@ -1649,12 +1664,12 @@ how much i'd hurt you long ago.`,
             }
         }
 
-        function changePage(newPage) {
+        window.changePage = function(newPage) {
             renderPoems(currentFilteredPoems, newPage);
             document.getElementById("poemFeed").scrollIntoView({ behavior: 'smooth' });
-        }
+        };
 
-        function ratePoem(poemKey, stars, btnElement) {
+        window.ratePoem = function(poemKey, stars, btnElement) {
             savedRatings[poemKey] = stars;
             localStorage.setItem("readspeare_ratings", JSON.stringify(savedRatings));
 
@@ -1673,16 +1688,16 @@ how much i'd hurt you long ago.`,
                 msgEl.textContent = starMessages[stars];
                 msgEl.classList.add('visible');
             }
-        }
+        };
 
-        function toggleCardNotes(poemKey) {
+        window.toggleCardNotes = function(poemKey) {
             const notesEl = document.getElementById(`notes-${poemKey}`);
             if (notesEl) {
                 notesEl.style.display = notesEl.style.display === "block" ? "none" : "block";
             }
-        }
+        };
 
-        function filterPoems() {
+        window.filterPoems = function() {
             const query = document.getElementById("searchInput").value.toLowerCase();
             const filtered = poems.filter((p, idx) => {
                 const poemKey = p.id || `poem-idx-${idx}`;
@@ -1694,7 +1709,7 @@ how much i'd hurt you long ago.`,
                 return matchesMood && matchesQuery;
             });
             renderPoems(filtered, 1);
-        }
+        };
 
         function escapeHTML(str) {
             const div = document.createElement('div');
@@ -1722,7 +1737,13 @@ how much i'd hurt you long ago.`,
             });
         }
 
-        function handlePoemSubmission(event) {
+        const q = query(communityRef, orderBy("createdAt", "desc"));
+        onSnapshot(q, (snapshot) => {
+            communityPoems = snapshot.docs.map(doc => doc.data());
+            renderCommunityPoems();
+        });
+
+        window.handlePoemSubmission = async function(event) {
             event.preventDefault();
             const title = document.getElementById("subTitle").value.trim().toLowerCase();
             let author = document.getElementById("subAuthor").value.trim().toLowerCase();
@@ -1730,20 +1751,25 @@ how much i'd hurt you long ago.`,
 
             if (!author) author = "anonymous";
 
-            const newPoem = { title, author, text };
-            communityPoems.unshift(newPoem);
-            localStorage.setItem("readspeare_community", JSON.stringify(communityPoems));
+            try {
+                await addDoc(communityRef, {
+                    title,
+                    author,
+                    text,
+                    createdAt: serverTimestamp()
+                });
 
-            document.getElementById("submissionForm").reset();
-            const successMsg = document.getElementById("successMsg");
-            successMsg.style.display = "block";
-            
-            renderCommunityPoems();
+                document.getElementById("submissionForm").reset();
+                const successMsg = document.getElementById("successMsg");
+                successMsg.style.display = "block";
 
-            setTimeout(() => {
-                successMsg.style.display = "none";
-            }, 5000);
-        }
+                setTimeout(() => {
+                    successMsg.style.display = "none";
+                }, 5000);
+            } catch (err) {
+                alert("could not publish right now—make sure firestore database is created in test mode!");
+            }
+        };
 
         function openPoem(poem) {
             const modalTitleEl = document.getElementById("modalTitle");
@@ -1759,20 +1785,20 @@ how much i'd hurt you long ago.`,
             document.getElementById("poemModal").style.display = "flex";
         }
 
-        function forceCloseModal() {
+        window.forceCloseModal = function() {
             document.getElementById("poemModal").style.display = "none";
-        }
+        };
 
-        function closeModal(event) {
+        window.closeModal = function(event) {
             if (event.target.id === "poemModal") {
                 forceCloseModal();
             }
-        }
+        };
 
-        function dismissToast(id) {
+        window.dismissToast = function(id) {
             const el = document.getElementById(id);
             if (el) el.style.display = "none";
-        }
+        };
 
         setTimeout(() => {
             const funFact = document.getElementById("funFactToast");
@@ -1784,13 +1810,13 @@ how much i'd hurt you long ago.`,
         const htmlElement = document.documentElement;
         const themeToggleBtn = document.getElementById("themeToggleBtn");
 
-        function toggleTheme() {
+        window.toggleTheme = function() {
             const currentTheme = htmlElement.getAttribute("data-theme");
             const newTheme = currentTheme === "light" ? "dark" : "light";
             htmlElement.setAttribute("data-theme", newTheme);
             localStorage.setItem("readspeare_theme", newTheme);
             updateThemeIcon(newTheme);
-        }
+        };
 
         function updateThemeIcon(theme) {
             themeToggleBtn.textContent = theme === "dark" ? "☀️" : "🌙";
@@ -1802,7 +1828,6 @@ how much i'd hurt you long ago.`,
 
         updateMoodCounts();
         renderPoems(poems, 1);
-        renderCommunityPoems();
     </script>
 
 </body>
