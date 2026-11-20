@@ -28,7 +28,7 @@
             --meta-color: #A39B90;
         }
 
-        * {
+- {
             box-sizing: border-box;
             transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
@@ -629,25 +629,744 @@
         const poems = [
             {
                 id: "poem-1",
-                title: "WRITE HERE ABOUT POEM 1 TITLE",
+                title: "when you walk by",
                 author: "readspeare archives",
-                text: `WRITE HERE ABOUT POEM 1 TEXT
-(PRESS ENTER FOR NEW LINES)`,
-                notes: "WRITE HERE ABOUT POEM 1 MEANING OR THOUGHTS (OR LEAVE EMPTY)"
+                text: `when you walk by, i smell roses.
+i turn and look, an angel i see
+your taste so sweet, it's almost unreal
+are you candy, my dear?
+are your tears this sweet?
+you just might be the one for me
+candy and mine, let's commit a crime.`,
+                notes: ""
             },
             {
                 id: "poem-2",
-                title: "WRITE HERE ABOUT POEM 2 TITLE",
+                title: "i heard you died",
                 author: "readspeare archives",
-                text: `WRITE HERE ABOUT POEM 2 TEXT`,
+                text: `i heard you died, i left and cried
+my tears so deep, i bleached my shirt.
+your presence i feel, your touch not there
+i fail to keep myself alert
+i lose my breath, i lose my sight.
+my hands go cold, my throat is tight
+hour by hour, now it's midnight
+i hold my neck and gasp for air
+i close my eyes, i see you there
+23/5 the day you died
+my mind won't stop, i just wish it would end
+everything goes silent.`,
                 notes: ""
             },
             {
                 id: "poem-3",
-                title: "WRITE HERE ABOUT POEM 3 TITLE",
+                title: "a butterfly rests on my eye",
                 author: "readspeare archives",
-                text: `WRITE HERE ABOUT POEM 3 TEXT`,
-                notes: "WRITE HERE ABOUT POEM 3 MEANING OR THOUGHTS"
+                text: `a butterfly rests on my eye
+i freeze, not even a sigh
+she's pretty, light, divine
+her gaze softens as it meets mine
+i wonder what goes through her mind
+my eyes ache, they mustn't dry
+it hurts to hold what's pretty on
+but letting go could be the one
+if only i blink and let her run
+run so free beneath the sun
+let her wander through the sky
+be free, my butterfly..
+goodbye.`,
+                notes: ""
+            },
+            {
+                id: "poem-4",
+                title: "the figure awaits",
+                author: "readspeare archives",
+                text: `the figure awaits,
+at the heavenly gates
+as tears roll down my face
+and i stand in vain
+"hell or heaven?" it uttered
+with a heavenly gaze`,
+                notes: ""
+            },
+            {
+                id: "poem-5",
+                title: "your smile awakes",
+                author: "readspeare archives",
+                text: `your smile awakes,
+there lies a little tale
+of a boy the heavens traced,
+almost perfect, he was
+with a doll-like face
+and glass porcelain eyes,
+like waves in the delicate sea,
+your beautiful sea eyes, they drown in me.`,
+                notes: ""
+            },
+            {
+                id: "poem-6",
+                title: "but i matter more than you",
+                author: "readspeare archives",
+                text: `"but i matter more than you"
+and.. yeah that may be true
+the way you said it, kinda rude
+but your point, i can't intrude.`,
+                notes: ""
+            },
+            {
+                id: "poem-7",
+                title: "his hoodie on my chair",
+                author: "readspeare archives",
+                text: `his hoodie on my chair
+the scent of him still there
+i miss the way he stared
+the way he called my name
+the things he used to get for me
+now dust collects where gifts should be
+can't help but feel it's all my fault
+if only love had kept its vault`,
+                notes: ""
+            },
+            {
+                id: "poem-8",
+                title: "his love and mine",
+                author: "readspeare archives",
+                text: `his love and mine, a harmony
+a cup and wine, a perfect night
+dine and drink, and drink some more
+until the world goes red and cold
+the ice melts down, into your drink
+down it goes, you feel no thing
+tick tock the clock, it's time to go
+one more day until its lore.`,
+                notes: ""
+            },
+            {
+                id: "poem-9",
+                title: "as time drifts by",
+                author: "readspeare archives",
+                text: `as time drifts by, you lure my mind
+softly slowly in ways undefined
+you stay even when i don't try
+your thought outlasts my sky
+i reach for you in every sigh,
+your presence lingers, never shy`,
+                notes: ""
+            },
+            {
+                id: "poem-10",
+                title: "thought it was love",
+                author: "readspeare archives",
+                text: `//thought it was love, my minds insane
+think it's enough, like a piece of grain
+too much, too little, i can't compare
+have to pick one, not fit for my haze
+it's only you who can make me gaze
+but my oh my, you look ablaze
+i watch, i ache, i stare, i pray
+until i go berserk one day`,
+                notes: ""
+            },
+            {
+                id: "poem-11",
+                title: "i see your eyes in every blue",
+                author: "readspeare archives",
+                text: `i see your eyes in every blue,
+it seems so pretty, like a hue
+like oceans deep, they hold me true
+they pull me in, i drown in them
+i chase their depth, i can't escape
+in every shade, i find your shape`,
+                notes: ""
+            },
+            {
+                id: "poem-12",
+                title: "your eyes like clouds",
+                author: "readspeare archives",
+                text: `your eyes like clouds,
+they draw me in
+no paper, no pencil,
+still sketch me within
+they stare, they gaze,
+my heart ablaze`,
+                notes: ""
+            },
+            {
+                id: "poem-13",
+                title: "your eyes, a sea",
+                author: "readspeare archives",
+                text: `your eyes, a sea,
+they swallow me whole
+a tide of blue,
+it pulls my soul
+i chase their depth,
+i cannot flee
+their endless gaze,
+it captivates me`,
+                notes: ""
+            },
+            {
+                id: "poem-14",
+                title: "i count the seconds",
+                author: "readspeare archives",
+                text: `i count the seconds, they stretch like days
+i replay your voice in endless ways
+i touch my phone, your name in sight
+yet you are gone, lost to the night
+my chest aches, my thoughts collide
+i crave your presence, cannot hide
+each memory burns, i can't let go
+your shadow follows me, high and low
+i chase your scent through empty air
+i feel your touch that isn't there
+your ghost remains in every room
+your name still blooms where flowers bloom
+i lose myself in thoughts of you
+a thousand dreams, and all of them true
+no matter where i turn or run
+my heart stays chained, you are the one`,
+                notes: ""
+            },
+            {
+                id: "poem-15",
+                title: "the way you look",
+                author: "readspeare archives",
+                text: `the way you look, the way you breathe
+my mind can't rest, my heart won't leave
+i won't let go, no matter the belief
+my soul aches daily, consumed by grief
+i trace your name in every thought
+your shadow lingers, can't be fought
+each second without you twists my mind
+i'm lost in you, in you i'm confined`,
+                notes: ""
+            },
+            {
+                id: "poem-16",
+                title: "i wish you were here",
+                author: "readspeare archives",
+                text: `i wish you were here
+to hold you close, to calm my fear
+i crave your warmth, your gentle touch
+your laugh, your voice, i miss so much
+each thought of you ignites my heart
+i'm tangled in you, can't be apart
+my mind spins wild, yet you make me whole
+your love consumes the edges of my soul`,
+                notes: ""
+            },
+            {
+                id: "poem-17",
+                title: "my ear bleeds of melodies",
+                author: "readspeare archives",
+                text: `my ear bleeds of melodies
+your beautiful voice ignites in me
+i live inside this sweetest dream
+a dream every girl would long to see
+your silence cuts, its sharp and deep
+my heart still calls you in my sleeр
+i love the way you make me feel
+so much it blurs whats fake and real
+i whisper thoughts you'll never hear
+yet still i hold you close, my dear.`,
+                notes: ""
+            },
+            {
+                id: "poem-18",
+                title: "i can't stop thinking of you",
+                author: "readspeare archives",
+                text: `i can't stop thinking of you
+every little thing you do
+your laugh, your voice, your stare
+you're everywhere, i swear
+i ache when you're away
+i wish you'd always stay
+you're my calm, my fire, my light
+the one i hold in every night`,
+                notes: ""
+            },
+            {
+                id: "poem-19",
+                title: "empty halls",
+                author: "readspeare archives",
+                text: `empty halls call out my name
+i stand in shock, i wail in pain
+it looks at me with a blank cold stare
+i'm scared inside, but i don't break
+pinch and hit, i will not flinch
+my ears ring loud, they ache so proud`,
+                notes: ""
+            },
+            {
+                id: "poem-20",
+                title: "his hands in mine",
+                author: "readspeare archives",
+                text: `his hands in mine, a destiny
+a place where i don't long to be
+a time i had control no more
+the time i down my guard, it shows
+stayed too still, i stayed too long
+mistaking quiet for being strong.`,
+                notes: ""
+            },
+            {
+                id: "poem-21",
+                title: "his voice echoes in my head",
+                author: "readspeare archives",
+                text: `his voice echoes in my head
+in the hallways, in my head
+all around, it's in my head
+i tell myself it's in my head
+when will it stop, it's in my head
+or is it mine? or something said
+outside of me, not in my head..`,
+                notes: ""
+            },
+            {
+                id: "poem-22",
+                title: "i walk along an empty road",
+                author: "readspeare archives",
+                text: `i walk along an empty road
+carrying all this silent load
+your name repeats inside my mind
+i swear i hear your voice unwind
+i fall to my knees in thought of you
+i cry beneath the sky so blue
+time's so slow without you near
+it feels as if the stars won't hear`,
+                notes: ""
+            },
+            {
+                id: "poem-23",
+                title: "the number that i once knew",
+                author: "readspeare archives",
+                text: `the number that i once knew
+the paintings of us i thought i drew
+the glow on your face slowly fades
+the money for the ticket i thought to place
+i miss your touch, that soft pink blush
+i miss the way you'd call my namе
+the way we'd sleep so deep, so far
+i just want you back, i'm sorry from afar`,
+                notes: ""
+            },
+            {
+                id: "poem-24",
+                title: "i lie on the grass",
+                author: "readspeare archives",
+                text: `i lie on the grass and stare at the sky
+thinking of you as tears fall down my eye
+drained from all the crying, i try to rest
+is this a manic episode or am i just depressed
+trapped in my own thoughts, as if i was dead
+i'm not here, i'm so lost, it's spinning my head
+can't think anymore, it's all blurring my sight
+my eyes spin in spirals as i think of you
+tonight
+never knew the night could feel this long
+without you in sight`,
+                notes: ""
+            },
+            {
+                id: "poem-25",
+                title: "i lay with my eyes open",
+                author: "readspeare archives",
+                text: `i lay with my eyes open, thinking of you
+no worries overcome me when i'm with you
+i wonder sometimes if you see us together
+i wanted to help you, my heart growing
+heavier
+it's not your fault, i can't ask for more
+i love you so much, it aches at my core`,
+                notes: ""
+            },
+            {
+                id: "poem-26",
+                title: "my texts stay unread",
+                author: "readspeare archives",
+                text: `my texts stay unread, still i stay calm
+trying to quiet the fear in my palm
+a single tear falls from my eye
+i whisper to myself you're alright tonight
+but what if one day you're not there
+what if i wake and you're gone somewhere
+what if the morning comes through the light
+and you're just.. missing from my life
+no warning, no word, no last goodbye
+just silence where you used to lie.`,
+                notes: ""
+            },
+            {
+                id: "poem-27",
+                title: "i sit on my bed",
+                author: "readspeare archives",
+                text: `i sit on my bed and lie down slow
+thinking of them, oh they must know
+i sit on my bed and my screen is lit
+their name on my phone, memories flow
+i sit on my bed, wait this isn't my room
+memories shift, my body comes through
+i walk to their bed, and not them i see
+instead all i see is that they're just a memory
+maybe they weren't even real, my mind's
+surreal
+it's blurry all around, my body's on the ground
+can't see anymore, i can't feel them anymore`,
+                notes: ""
+            },
+            {
+                id: "poem-28",
+                title: "bought a new bed",
+                author: "readspeare archives",
+                text: `bought a new bed, how exciting this is
+i unpack and i've got a brand new bliss
+so white, so new, it makes me bloom
+how nice it is to have this room
+a bed so clean, it waits for you
+so soft, so light, so perfect too
+no monsters creep, no hands at your feet
+just quiet sleep that feels so sweet
+no worries my friend, it's just your bed
+just rest your thoughts inside your head`,
+                notes: ""
+            },
+            {
+                id: "poem-29",
+                title: "i pushed you away",
+                author: "readspeare archives",
+                text: `i pushed you away, to see if you'd stay
+maybe one day you'll know my ways
+wish i was priority, the one you craved
+guess ill never be more than your slave
+but it's okay, i shouldn't complain
+being forgotten was all i deserved anyway.`,
+                notes: ""
+            },
+            {
+                id: "poem-30",
+                title: "the quiet blows of wind",
+                author: "readspeare archives",
+                text: `the quiet blows of wind seem to take over me
+it makes me feel so free, almost way too
+free to be
+it's almost like i'm a fly in a world full of bees
+i seem to go unseen, like i'm not even here`,
+                notes: ""
+            },
+            {
+                id: "poem-31",
+                title: "beneath the heavenly sky",
+                author: "readspeare archives",
+                text: `i sat beneath the heavenly sky
+the raindrops fall, and time drifts by
+i sat once more beneath the sky
+i look at him, and wonder why
+sat beneath the blue wide sky
+he creeps so slow, he creeps on by
+sitting beneath the darkened night
+i close my eyes, he's in my sight.`,
+                notes: ""
+            },
+            {
+                id: "poem-32",
+                title: "a vase and a rose",
+                author: "readspeare archives",
+                text: `i bought myself a vase and a rose
+held them so tight against my bones
+walking down the street, afraid they'd fall
+i count my breath, five steps to go
+home is close, just need to push a little more
+don't let them touch, don't let anyone near
+i drop everything the second i'm here
+i hit the ground like i held no thing
+it all falls down, nothing left to cling`,
+                notes: ""
+            },
+            {
+                id: "poem-33",
+                title: "i saw the sky you longed to see",
+                author: "readspeare archives",
+                text: `i saw the sky you longed to see
+so high, so blue, so far from me
+its light fell soft between the leaves
+the leaves that carry a part of me.
+i see his face in every place
+it drives me mad, it makes me sane
+his eyes a brown that makes me gaze
+the morning sun lights on his skin
+it shines so bright, so pure within
+and still he stays inside my mind
+he's the only thought that i find`,
+                notes: ""
+            },
+            {
+                id: "poem-34",
+                title: "the air felt lighter",
+                author: "readspeare archives",
+                text: `the air felt lighter, almost like a breeze
+its the very first time i really felt at ease
+his smell lingers by, it doesn't displease
+a fruity kind of scent, the one id use
+its almost as if my hint came through
+my chest could breathe, it felt so free
+like i wasn't locked up in a place with no trees
+i saw him walk by, my heart slowed down
+its almost as if no tears had ever came down.`,
+                notes: ""
+            },
+            {
+                id: "poem-35",
+                title: "every second, it feels like an hour",
+                author: "readspeare archives",
+                text: `every second, it feels like an hour
+i want to help, yet i lack all power
+your wounds are seen, they're pretty as
+flowers
+you taste so sweet, with a hint of sour
+if you were here, i think i'd devour
+mate, you storm in like some bloody shower`,
+                notes: ""
+            },
+            {
+                id: "poem-36",
+                title: "i met a guy",
+                author: "readspeare archives",
+                text: `i met a guy
+he made me cry,
+for days and years
+i stayed to please
+i hid my tears
+my red puffed face
+i couldn't embrace
+the side of me
+that begged to leave
+through all my fears
+my days, my dreams
+my time, my life
+i stayed to please.`,
+                notes: ""
+            },
+            {
+                id: "poem-37",
+                title: "roses are red",
+                author: "readspeare archives",
+                text: `roses are red
+violets are blue
+ive never seen someone
+as pretty as you,,`,
+                notes: ""
+            },
+            {
+                id: "poem-38",
+                title: "the fire caught me by my heels",
+                author: "readspeare archives",
+                text: `(slang rhymes)
+the fire caught me by my heels
+i tried to save you but i couldn't see
+the morning light crept in from seams
+it's time to go, finally time to leave
+i left you there, to burn inside
+but saved my life and lived a life.`,
+                notes: ""
+            },
+            {
+                id: "poem-39",
+                title: "i thought i died",
+                author: "readspeare archives",
+                text: `i thought i died
+i thought you cried
+i thought i left everything behind
+i thought the rain came crashing down
+i thought it was you that was calling out
+i thought i mattered
+i thought you'd stay
+i thought every word was meant to stain
+guess it didn't work
+nothing ever lasts with you anymore.`,
+                notes: ""
+            },
+            {
+                id: "poem-40",
+                title: "those eyes that bled a thousand tears",
+                author: "readspeare archives",
+                text: `those eyes that bled a thousand tears
+those hands that swore they held no life
+those empty eyes that stared into me
+still saving souls from endless seas
+those lips that claimed they felt no pain
+yet healed the hearts that broke in rain
+those hands that said they moved no more
+still pulled the lost back to the shore
+you gave your warmth to those in need
+then wondered why you froze and bleed
+you called yourself a heartless soul
+yet gave away the love you hold`,
+                notes: ""
+            },
+            {
+                id: "poem-41",
+                title: "an angel of the hierarchies",
+                author: "readspeare archives",
+                text: `i think you were meant to be
+an angel of the hierarchies
+with wings so torn, yet still you fly
+a soul too bright for earthly skies
+yet blind to all within your eyes
+you never saw the light you gave
+but only the darkness that you crave
+you call yourself a heartless thing
+still giving others a reason to sing
+and fly so free beneath the sky
+with wings so big they fill with light`,
+                notes: ""
+            },
+            {
+                id: "poem-42",
+                title: "to the morning i woke",
+                author: "readspeare archives",
+                text: `to the morning i woke with blinds so bright,
+i'm sorry to you for hiding from your light.
+to the floor that carried me each passing
+day, i'm sorry for every step i walked your
+way.
+to the bottle resting by my side, i'm sorry i
+always let you dry.
+to the couch that waited year by year, i'm
+sorry no one ever rested here,
+to the chair that gathered dust instead, i'm
+sorry i chose the silence of my bed.
+to the little plush that watched me through
+it all, i'm sorry i couldn't hold you every time
+i'd fall.
+to my one good friend who promised to stay,
+i'm sorry for always pushing you away.`,
+                notes: ""
+            },
+            {
+                id: "poem-43",
+                title: "the quiet winds",
+                author: "readspeare archives",
+                text: `the quiet winds, they wait for mе
+like children waiting by the sea
+to pass them by and let me be
+the sea before me stares at me
+so deep, so blue, i feel so free
+the earthy sand beneath my feet
+it has a hum so soft, so sweet
+the quiet warmth makes me complete.`,
+                notes: ""
+            },
+            {
+                id: "poem-44",
+                title: "the morning sunlight creeps inside",
+                author: "readspeare archives",
+                text: `the morning sunlight creeps inside
+it paints my golden floors with light
+i sip and watch as midnight falls
+my room forgets i'm even here
+it makes me feel so ill, not real
+i wake up wishing this will all end soon
+i saw the way he looked at me
+a thousand thoughts refused to leave
+they run so fast it's hard to breathe
+the feeling brings me to my knees
+my hands grow still beneath my sleeves
+if only he meant all that he said
+we wouldn't be here, starting over again.`,
+                notes: ""
+            },
+            {
+                id: "poem-45",
+                title: "your haunting voice wakes me up",
+                author: "readspeare archives",
+                text: `your haunting voice wakes me up
+a whisper crawling through the silence
+it lingers on, though barely heard
+i think it might just be a bird.`,
+                notes: ""
+            },
+            {
+                id: "poem-46",
+                title: "quiet thoughts consume my soul",
+                author: "readspeare archives",
+                text: `quiet thoughts consume my soul
+they come and bang upon my door
+it brings me closer to the floor
+at last i hear my mind go slow
+the room begins to fade away
+and all my thoughts just drift below
+i love you more than i could say
+more than the universe in every way
+with the galaxies above they look so sweet
+it makes me feel a feeling i cant describе
+its almost euphoric with a million things
+combined
+happiness, joy, freedom and trust
+theres so much to say but no words to speak
+this all just feels like one big dream
+a dream every girl would long to see`,
+                notes: ""
+            },
+            {
+                id: "poem-47",
+                title: "the morning feels incomplete without her",
+                author: "readspeare archives",
+                text: `the morning feels incomplete without her.
+i wake up alone, no warmth on my chest.
+an empty room where your presence used to
+rest.
+he looked so sweet just passing by,
+a million thoughts came over my mind
+oh, just the things i'd do for you
+i promise my love you'd never (ever) know
+just the depth i'm willing to go.`,
+                notes: ""
+            },
+            {
+                id: "poem-48",
+                title: "his eyes stand surrounding me",
+                author: "readspeare archives",
+                text: `his eyes stand surrounding me
+it feels like more than just a breeze
+a moment in time when i stand beneath
+i feel his eyes crawling over me
+voices fade, the sounds of the crowd
+everything blurs, only he's around
+my laces loosen apart as i run
+i stumble forward, hit the ground
+footsteps draw near, my heart starts to
+pound
+my eyes meet his, hands reach for me
+he pulls me close, his breath so near
+his grin so wide, i see his teeth
+my feet stay fixed in place,
+i can't escape this hellish (hell like) place.`,
+                notes: ""
+            },
+            {
+                id: "poem-49",
+                title: "tell me, tell me, will you please",
+                author: "readspeare archives",
+                text: `tell me, tell me, will you please
+just how much you long for/want from me
+ill tell you if you want to see
+just how much you mean to me`,
+                notes: ""
+            },
+            {
+                id: "poem-50",
+                title: "i promise that i didn't know",
+                author: "readspeare archives",
+                text: `i promise that i didn't know
+all the hurt i caused your soul
+i didn't know i'd hurt you so
+with all the words ive said before
+i'd rather rest along the shore
+i didn't know, i couldn't see
+the weight my words had come to be
+i didn't know, i didn't know
+how much i'd hurt you long ago.`,
+                notes: ""
             }
         ];
 
